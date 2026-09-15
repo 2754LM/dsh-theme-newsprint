@@ -5,12 +5,12 @@ A DSH theme plugin. It carries the newspaper typography of [Typora](https://typo
 ![Light](assets/preview-light.png)
 
 - **Light** — warm paper `#f5f3ed`, ink text `#1f0909`, a single sea-blue accent `#065588`; the neutrals are one eight-step warm paper ramp, below.
-- **Dark** — no second palette is shipped. dsh's own `[data-ds-dark-theme]` flow takes over and gives you the stock neutral-black dark mode, with the same typographic treatment.
+- **Dark** — a warm dark newsprint: stock `#1a1815` (warm brown-black, neither `#000` nor blue-black), warm-white ink `#ece7dd`, accent lifted to `#5aa9d6`. The newsprint character is kept rather than deferred to the stock neutral black.
 - **Body** — the whole document switches to a serif stack: Georgia → PT Serif → Noto Serif SC → SimSun.
 
 ## Palette
 
-Every colour collapses into one palette (`PALETTE` in `lib/client.js`); retuning one value moves the whole app.
+Both schemes share one **role vocabulary** (`paper.*` is the surface ramp from most raised to hardest rule, `ink.*` the text ramp from strongest to most decorative); the colours live in `SCHEMES` in `lib/client.js`, so retuning one value moves the whole app. The token map is built by `buildTokens(scheme)`, so each scheme generates its own set from the same role names.
 
 | Step | Value | Used for |
 | --- | --- | --- |
@@ -92,7 +92,7 @@ A `cordis instrumented plugin`: `package.json` declares `dsh.bundle.patch` (its 
 
 The host half's `apply()` is a no-op; the client half does one thing: append a single `<style id="dsh-theme-newsprint-styles">` element to `<head>` with the light tokens + L3 typography, and add a `dsh-newsprint-active` class on `html` to scope it. The fiber-dispose hook removes the class and the `<style>`.
 
-The benefit is durability against dsh client-topology refactors. When `dsh-client-runtime` was split into the two `dsh-api-*` controllers in 0.1.5-rc.2, every plugin that went through `ctx.theme` broke (services collided at fiber time). This plugin only injects CSS into the DOM, so it is immune. The cost is that no "light/dark" picker of the theme runtime can drive it — so the dark scheme is simply delegated to dsh's official dark.
+The benefit is durability against dsh client-topology refactors. When `dsh-client-runtime` was split into the two `dsh-api-*` controllers in 0.1.5-rc.2, every plugin that went through `ctx.theme` broke (services collided at fiber time). This plugin only injects CSS into the DOM, so it is immune. The cost is that no "light/dark" picker of the theme runtime can drive it, so the scheme is decided in CSS instead: dsh writes `data-ds-dark-theme` on `<body>` (`boot-theme.ts` in `ui-theme`), and this plugin branches on that attribute without subscribing to any theme service. That is also why the two schemes must handle specificity carefully — the dark block and the light block carry the same specificity by default, so they are separated with `:not()` and an explicit attribute selector.
 
 ## License
 
