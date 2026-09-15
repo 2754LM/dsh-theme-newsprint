@@ -1,0 +1,6 @@
+# dsh-theme-newsprint profile patch layer — insert one loader entry for
+# the plugin package. The dshmarket theme manager flips this entry's
+# `disabled` flag on activate / deactivate; the rest is the browser half.
+- insert:
+    - id: newsprint
+      name: 'dsh-theme-newsprint'
