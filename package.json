@@ -1,7 +1,7 @@
 {
   "name": "dsh-theme-newsprint",
-  "version": "2.0.3",
-  "description": "报纸衬线 · Newsprint Serif — DSH 主题插件（cordis 埋点版）：暖白报纸 + 衬线正文 + 报纸排版笔画；暗色用 DSH 官方中性黑。零 @deepseek-ai/* client peer,免疫 dsh-client-ui-theme 拓扑变更。",
+  "version": "2.1.0",
+  "description": "报纸衬线 · Newsprint Serif — DSH 主题插件（cordis 埋点版）：暖白报纸 + 衬线正文 + 报纸排版笔画；暗色用 DSH 官方中性黑。零 @deepseek-ai/* client peer，免疫 dsh-client-ui-theme 拓扑变更。",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",
@@ -44,7 +44,6 @@
     "warm",
     "ink",
     "cordis",
-    "shim",
     "换肤",
     "主题",
     "报纸",

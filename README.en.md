@@ -4,9 +4,30 @@ A DSH theme plugin. It carries the newspaper typography of [Typora](https://typo
 
 ![Light](assets/preview-light.png)
 
-- **Light** — warm paper `#f3f2ee`, ink text `#1f0909`, a single sea-blue accent `#065588`.
+- **Light** — warm paper `#f5f3ed`, ink text `#1f0909`, a single sea-blue accent `#065588`; the neutrals are one eight-step warm paper ramp, below.
 - **Dark** — no second palette is shipped. dsh's own `[data-ds-dark-theme]` flow takes over and gives you the stock neutral-black dark mode, with the same typographic treatment.
 - **Body** — the whole document switches to a serif stack: Georgia → PT Serif → Noto Serif SC → SimSun.
+
+## Palette
+
+Every colour collapses into one palette (`PALETTE` in `lib/client.js`); retuning one value moves the whole app.
+
+| Step | Value | Used for |
+| --- | --- | --- |
+| `raised` | `#fdfdfa` | inputs, cards, the selected code segment |
+| `base` | `#f5f3ed` | app background and reading surface |
+| `stripe` | `#efeadd` | zebra rows, gradient fades |
+| `container` | `#ebe7de` | sidebar, bubbles, code panels |
+| `emphasis` | `#e0dbcf` | header strips, inline code, hovered rows, scrollbar |
+| `selected` | `#d7d0c0` | active row, multi-select |
+| `rule` | `#cfc8b8` | hairlines, scrollbar track |
+| `ruleDeep` | `#b3a996` | scrollbar hover |
+
+Ink ramp, with contrast against `base`: primary `#1f0909` 17.2:1, secondary `#5a5049` 7.1:1, dimmed primary `#6b6156` 5.5:1, tertiary `#776c62` 4.6:1, caption `#948a7e` 3.0:1 (metadata only), decorative `#c3bbae`.
+
+The single accent is the sea blue `#065588` (7.1:1), reserved for links, focus and the info state; the brand colour and the primary button are ink, deepening to `#3f2d22` on hover; green, amber and red are all desaturated to a printing-ink register.
+
+Two hard rules: **every neutral must be a step of the warm paper ramp above — a true neutral grey (r=g=b) reads as dirt on warm paper**; and **every translucent colour is derived from its opaque source by `alpha()`, never a hand-written rgba**.
 
 ## Install
 
