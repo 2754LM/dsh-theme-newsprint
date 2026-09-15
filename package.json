@@ -1,6 +1,6 @@
 {
   "name": "dsh-theme-newsprint",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "报纸衬线 · Newsprint Serif — DSH 主题插件：暖白报纸 + 纯黑中性灰 + 衬线正文 + 报纸排版笔画",
   "license": "MIT",
   "type": "module",
@@ -57,14 +57,6 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
-    },
-    "client": {
-      "inject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-theme"
-      ],
-      "platform": "web"
     }
   }
 }
