@@ -1,30 +1,39 @@
 # 报纸衬线 · Newsprint Serif
 
-一个 DSH 主题插件。把 [Typora](https://typora.io/) `newsprint` 主题的报纸排版气质搬进 DSH Web GUI。
+一个 DSH 主题插件，把 [Typora](https://typora.io/) `newsprint` 主题的报纸排版气质搬进 DSH Web GUI。纯 CSS，无 hooks，无图片资产。
+
+![亮色](assets/preview-light.png)
 
 - **亮色** — 暖白纸张 `#f3f2ee`，墨色正文 `#1f0909`，全篇只有一个海蓝强调色 `#065588`。
-- **暗色** — 不做。切到暗色时由 DSH 官方的 `[data-ds-dark-theme]` 流程接管，呈现中性黑（自带 stock dark）。
+- **暗色** — 不另配一套配色。切到暗色时由 DSH 官方的 `[data-ds-dark-theme]` 流程接管，呈现中性黑（自带 stock dark），排版笔画照旧生效。
 - **正文** — 整套换成衬线栈：Georgia → PT Serif → 思源宋体 → 宋体。
 
 ## 安装
-
-通过 [dshmarket](https://github.com/dsh-market/dsh-market) 装入 `web` profile 后重启，或直接：
 
 ```sh
 dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
 ```
 
-## 启用 / 停用
+或用 [dshmarket](https://github.com/dsh-market/dsh-market)：**设置 → 插件市场 → 主题**，一键安装。装完刷新页面即可，不需要重启 dsh。
 
-- **在 dshmarket 主题页**（先要在 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 收录一条）点 Apply / Uninstall。
-- **手动**（没收录时）改 `~/.dsh/profiles/web/cordis.patch.yml`：
+## 启用 / 停用 / 卸载
+
+- **市场里**：主题页点 Apply / Uninstall。
+- **手动启停**：编辑 `~/.dsh/profiles/web/cordis.patch.yml`
 
   ```yaml
   - id: newsprint
-    disabled: false   # true = 停用，false / 删掉 = 启用
+    disabled: true    # true = 停用；false 或删掉这一行 = 启用
   ```
 
-  加载器会热重载。装上但未启用时，DSH 整页看起来跟官方主题一模一样，没有任何排版泄露。
+  加载器会热重载。装上但未启用时，DSH 整页与官方主题完全一致，没有任何排版泄露。
+- **卸载**：
+
+  ```sh
+  dsh plugin --profile web remove dsh-theme-newsprint
+  ```
+
+> 多主题并存：手动 `dsh plugin add` 装的主题没有市场那层互斥管理，同时启用会互相叠加。只留一个启用，其余在 `cordis.patch.yml` 里写 `disabled: true`。
 
 ## 它带来了什么
 
@@ -53,14 +62,11 @@ dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
 
 ## 形态
 
-`cordis 埋点插件`，**不依赖** `@deepseek-ai/dsh-client-ui-theme` 运行时、不调 `ctx.theme.register()`、不写 `dsh.client` 块。`apply()` 干一件事：往 `<head>` 塞一个 `<style id="dsh-theme-newsprint-styles">`，里面是亮档 token + L3 排版；fiber dispose 时移除 class 和 `<style>`。
+`cordis 埋点插件`：package.json 里声明 `dsh.bundle.patch`（自带 `cordis.patch.yml`，插入 loader 条目 `id: newsprint`）与 `dsh.client`（web 平台）。**不依赖** `@deepseek-ai/dsh-client-ui-theme` 运行时，也不调 `ctx.theme.register()`。
 
-好处是抗 DSH client 拓扑变更——`dsh-client-runtime` 被拆成 controller 那次（0.1.5-rc.2），所有走 `ctx.theme` 的主题插件都翻车了；本插件只往 DOM 注 CSS，免疫。代价是失去 dshmarket 主题选择器的「亮/暗档切换」能力（因为我们根本不接入 `ctx.theme`），所以暗档干脆不做，让 DSH 官方接管。
+宿主半边 `apply()` 是空实现；client 半边只做一件事：往 `<head>` 塞一个 `<style id="dsh-theme-newsprint-styles">`（亮档 token + L3 排版），并在 `html` 上加 `dsh-newsprint-active` 类把作用域限住；fiber dispose 时移除 class 与 `<style>`。
 
-## 已知事项
-
-- **`assets/preview-dark.png` 是占位图**（直接复制了 light）。本插件不写暗档，没有真暗色预览。`node scripts/capture-previews newsprint` 工具要 awesome-dsh-plugin 收录后才能跑，到时候再补。
-- 本仓库之前是 v1 系列的「皮肤包」（skin-center 形态），2.0.0 是回退到「cordis 埋点」形态（老插件的形态），架构不同，semver 升大版本。
+好处是抗 DSH client 拓扑变更——`dsh-client-runtime` 被拆成 controller 那次（0.1.5-rc.2），所有走 `ctx.theme` 的主题插件都翻车了；本插件只往 DOM 注 CSS，免疫。代价是失去 dshmarket 主题选择器的「亮/暗档切换」能力（因为根本不接入 `ctx.theme`），所以暗档交给 DSH 官方。
 
 ## 许可
 

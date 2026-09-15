@@ -1,30 +1,39 @@
 # Newsprint Serif
 
-A DSH theme plugin. It carries the newspaper typography of [Typora](https://typora.io/)'s `newsprint` theme into the DSH Web GUI.
+A DSH theme plugin. It carries the newspaper typography of [Typora](https://typora.io/)'s `newsprint` theme into the DSH Web GUI. Pure CSS, no hooks, no image assets.
+
+![Light](assets/preview-light.png)
 
 - **Light** — warm paper `#f3f2ee`, ink text `#1f0909`, a single sea-blue accent `#065588`.
-- **Dark** — not shipped. dsh's own `[data-ds-dark-theme]` flow takes over and gives you the stock neutral-black dark mode.
+- **Dark** — no second palette is shipped. dsh's own `[data-ds-dark-theme]` flow takes over and gives you the stock neutral-black dark mode, with the same typographic treatment.
 - **Body** — the whole document switches to a serif stack: Georgia → PT Serif → Noto Serif SC → SimSun.
 
 ## Install
-
-Install via [dshmarket](https://github.com/dsh-market/dsh-market) into your `web` profile and restart, or directly:
 
 ```sh
 dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
 ```
 
-## Enable / disable
+Or use [dshmarket](https://github.com/dsh-market/dsh-market): **Settings → Plugin Market → Themes**, one click. Refresh the page afterwards; restarting dsh is not required.
 
-- **In the dshmarket Themes tab** — once the plugin is registered in [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin), click Apply / Uninstall there.
-- **Manually** (before the registry entry lands) edit `~/.dsh/profiles/web/cordis.patch.yml`:
+## Enable / disable / uninstall
+
+- **In the market**: Apply / Uninstall on the theme page.
+- **Manually**: edit `~/.dsh/profiles/web/cordis.patch.yml`
 
   ```yaml
   - id: newsprint
-    disabled: false   # true to disable, false / delete to enable
+    disabled: true    # true to disable; false or delete the row to enable
   ```
 
   The loader hot-reloads. With the plugin installed but not enabled, dsh looks exactly like the stock theme — no typography leaks.
+- **Uninstall**:
+
+  ```sh
+  dsh plugin --profile web remove dsh-theme-newsprint
+  ```
+
+> Multiple themes: a theme installed by hand with `dsh plugin add` has none of the market's mutual-exclusion handling, so two enabled themes stack on each other. Keep exactly one enabled and write `disabled: true` for the rest in `cordis.patch.yml`.
 
 ## What it brings
 
@@ -53,14 +62,11 @@ Anchor selectors are stable attributes, not hashed class names. `.markdown` is a
 
 ## Form
 
-`cordis-shim plugin` — it does **not** depend on `@deepseek-ai/dsh-client-ui-theme`, does **not** call `ctx.theme.register()`, declares **no `dsh.client` block**. The `apply(ctx)` function does one thing: append a single `<style id="dsh-theme-newsprint-styles">` element to `<head>` with the light tokens + L3 typography; the fiber-dispose hook removes the class and the `<style>`.
+A `cordis instrumented plugin`: `package.json` declares `dsh.bundle.patch` (its own `cordis.patch.yml`, which inserts the loader entry `id: newsprint`) and `dsh.client` (platform web). It does **not** depend on `@deepseek-ai/dsh-client-ui-theme` and does **not** call `ctx.theme.register()`.
 
-The benefit is durability against dsh client-topology refactors. When `dsh-client-runtime` was split into the two `dsh-api-*` controllers in 0.1.5-rc.2, every plugin that went through `ctx.theme` broke (services collided at fiber time). This plugin only injects CSS into the DOM, so it is immune. The cost is that we cannot hook into dshmarket's "light/dark theme" picker — so the dark scheme is simply not shipped; dsh's official dark takes over.
+The host half's `apply()` is a no-op; the client half does one thing: append a single `<style id="dsh-theme-newsprint-styles">` element to `<head>` with the light tokens + L3 typography, and add a `dsh-newsprint-active` class on `html` to scope it. The fiber-dispose hook removes the class and the `<style>`.
 
-## Known issues
-
-- `assets/preview-dark.png` is a placeholder (a copy of `preview-light.png`). The plugin ships no dark scheme, so there is no real dark preview. The official `node scripts/capture-previews newsprint` needs the awesome-dsh-plugin registry entry first; will fill this in once the PR lands.
-- The previous major version (1.x) was a skin-center skin. 2.0.0 is a deliberate return to the cordis-shim form because the skin-center path proved brittle to dsh client refactors.
+The benefit is durability against dsh client-topology refactors. When `dsh-client-runtime` was split into the two `dsh-api-*` controllers in 0.1.5-rc.2, every plugin that went through `ctx.theme` broke (services collided at fiber time). This plugin only injects CSS into the DOM, so it is immune. The cost is that we cannot hook into dshmarket's "light/dark theme" picker — so the dark scheme is simply delegated to dsh's official dark.
 
 ## License
 

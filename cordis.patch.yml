@@ -1,8 +1,8 @@
 # dsh-theme-newsprint profile patch layer — insert one loader entry for
-# the plugin package. No dsh.client block: this plugin is the cordis-shim
-# form (see lib/index.js for the rationale). dshmarket recognises the
-# entry as a theme by matching against the awesome-dsh-plugin registry
-# and toggles its `disabled` flag on activate / deactivate.
+# the plugin package. The package declares dsh.bundle.patch (this file) and
+# dsh.client (platform web, lib/client.js). dshmarket recognises the entry as
+# a theme through the awesome-dsh-plugin registry and toggles its `disabled`
+# flag on activate / deactivate.
 - insert:
     - id: newsprint
       name: 'dsh-theme-newsprint'
