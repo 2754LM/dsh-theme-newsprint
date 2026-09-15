@@ -10,16 +10,21 @@
 
 ## 安装
 
+本插件独立，不依赖任何市场、皮肤中心或第三方商店——它就是一个普通的 profile bundle，只用 `dsh plugin` 装。
+
 ```sh
+# 从仓库装
 dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
+
+# 或装预构建包（不拉整个仓库）
+dsh plugin --profile web add https://github.com/2754LM/dsh-theme-newsprint/releases/latest/download/dsh-theme-newsprint.tgz
 ```
 
-或用 [dshmarket](https://github.com/dsh-market/dsh-market)：**设置 → 插件市场 → 主题**，一键安装。装完刷新页面即可，不需要重启 dsh。
+装完刷新页面；若主题没出现，重启一次 dsh（bundle 列表在启动时读取）。
 
 ## 启用 / 停用 / 卸载
 
-- **市场里**：主题页点 Apply / Uninstall。
-- **手动启停**：编辑 `~/.dsh/profiles/web/cordis.patch.yml`
+- **停用 / 重新启用**：编辑 `~/.dsh/profiles/web/cordis.patch.yml`
 
   ```yaml
   - id: newsprint
@@ -33,7 +38,7 @@ dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
   dsh plugin --profile web remove dsh-theme-newsprint
   ```
 
-> 多主题并存：手动 `dsh plugin add` 装的主题没有市场那层互斥管理，同时启用会互相叠加。只留一个启用，其余在 `cordis.patch.yml` 里写 `disabled: true`。
+> 多主题并存：同时启用两个主题会互相叠加，只留一个启用，其余写上 `disabled: true`。
 
 ## 它带来了什么
 
@@ -62,7 +67,7 @@ dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
 
 ## 形态
 
-`cordis 埋点插件`：package.json 里声明 `dsh.bundle.patch`（自带 `cordis.patch.yml`，插入 loader 条目 `id: newsprint`）与 `dsh.client`（web 平台）。**不依赖** `@deepseek-ai/dsh-client-ui-theme` 运行时，也不调 `ctx.theme.register()`。
+`cordis 埋点插件`：package.json 里声明 `dsh.bundle.patch`（自带 `cordis.patch.yml`，插入 loader 条目 `id: newsprint`）与 `dsh.client`（web 平台）。**不依赖** `@deepseek-ai/dsh-client-ui-theme` 运行时，也不调 `ctx.theme.register()`，没有任何市场侧或皮肤中心的运行时依赖。
 
 宿主半边 `apply()` 是空实现；client 半边只做一件事：往 `<head>` 塞一个 `<style id="dsh-theme-newsprint-styles">`（亮档 token + L3 排版），并在 `html` 上加 `dsh-newsprint-active` 类把作用域限住；fiber dispose 时移除 class 与 `<style>`。
 

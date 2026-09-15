@@ -10,16 +10,21 @@ A DSH theme plugin. It carries the newspaper typography of [Typora](https://typo
 
 ## Install
 
+This plugin is standalone: it depends on no market, skin center, or third-party store. It is an ordinary profile bundle, installed with `dsh plugin` alone.
+
 ```sh
+# from the repository
 dsh plugin --profile web add github:2754LM/dsh-theme-newsprint
+
+# or the prebuilt tarball (no full-repo download)
+dsh plugin --profile web add https://github.com/2754LM/dsh-theme-newsprint/releases/latest/download/dsh-theme-newsprint.tgz
 ```
 
-Or use [dshmarket](https://github.com/dsh-market/dsh-market): **Settings → Plugin Market → Themes**, one click. Refresh the page afterwards; restarting dsh is not required.
+Refresh the page afterwards; if the theme does not appear, restart dsh once (the bundle list is read at startup).
 
 ## Enable / disable / uninstall
 
-- **In the market**: Apply / Uninstall on the theme page.
-- **Manually**: edit `~/.dsh/profiles/web/cordis.patch.yml`
+- **Disable / re-enable**: edit `~/.dsh/profiles/web/cordis.patch.yml`
 
   ```yaml
   - id: newsprint
@@ -33,7 +38,7 @@ Or use [dshmarket](https://github.com/dsh-market/dsh-market): **Settings → Plu
   dsh plugin --profile web remove dsh-theme-newsprint
   ```
 
-> Multiple themes: a theme installed by hand with `dsh plugin add` has none of the market's mutual-exclusion handling, so two enabled themes stack on each other. Keep exactly one enabled and write `disabled: true` for the rest in `cordis.patch.yml`.
+> Multiple themes: two enabled themes stack on each other. Keep exactly one enabled and write `disabled: true` for the rest.
 
 ## What it brings
 
@@ -62,7 +67,7 @@ Anchor selectors are stable attributes, not hashed class names. `.markdown` is a
 
 ## Form
 
-A `cordis instrumented plugin`: `package.json` declares `dsh.bundle.patch` (its own `cordis.patch.yml`, which inserts the loader entry `id: newsprint`) and `dsh.client` (platform web). It does **not** depend on `@deepseek-ai/dsh-client-ui-theme` and does **not** call `ctx.theme.register()`.
+A `cordis instrumented plugin`: `package.json` declares `dsh.bundle.patch` (its own `cordis.patch.yml`, which inserts the loader entry `id: newsprint`) and `dsh.client` (platform web). It does **not** depend on `@deepseek-ai/dsh-client-ui-theme`, does **not** call `ctx.theme.register()`, and has no runtime dependency on any market or skin center.
 
 The host half's `apply()` is a no-op; the client half does one thing: append a single `<style id="dsh-theme-newsprint-styles">` element to `<head>` with the light tokens + L3 typography, and add a `dsh-newsprint-active` class on `html` to scope it. The fiber-dispose hook removes the class and the `<style>`.
 
