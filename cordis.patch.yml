@@ -1,8 +1,7 @@
 # dsh-theme-newsprint profile patch layer — insert one loader entry for
 # the plugin package. The package declares dsh.bundle.patch (this file) and
-# dsh.client (platform web, lib/client.js). dshmarket recognises the entry as
-# a theme through the awesome-dsh-plugin registry and toggles its `disabled`
-# flag on activate / deactivate.
+# dsh.client (platform web, lib/client.js). The entry id is stable so any
+# profile patch layer can toggle it with `- id: newsprint` + `disabled: true`.
 - insert:
     - id: newsprint
       name: 'dsh-theme-newsprint'

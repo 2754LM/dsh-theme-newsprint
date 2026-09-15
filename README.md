@@ -71,7 +71,7 @@ dsh plugin --profile web add https://github.com/2754LM/dsh-theme-newsprint/relea
 
 宿主半边 `apply()` 是空实现；client 半边只做一件事：往 `<head>` 塞一个 `<style id="dsh-theme-newsprint-styles">`（亮档 token + L3 排版），并在 `html` 上加 `dsh-newsprint-active` 类把作用域限住；fiber dispose 时移除 class 与 `<style>`。
 
-好处是抗 DSH client 拓扑变更——`dsh-client-runtime` 被拆成 controller 那次（0.1.5-rc.2），所有走 `ctx.theme` 的主题插件都翻车了；本插件只往 DOM 注 CSS，免疫。代价是失去 dshmarket 主题选择器的「亮/暗档切换」能力（因为根本不接入 `ctx.theme`），所以暗档交给 DSH 官方。
+好处是抗 DSH client 拓扑变更——`dsh-client-runtime` 被拆成 controller 那次（0.1.5-rc.2），所有走 `ctx.theme` 的主题插件都翻车了；本插件只往 DOM 注 CSS，免疫。代价是拿不到主题运行时那套「亮/暗档切换」选择器（因为根本不接入 `ctx.theme`），所以暗档交给 DSH 官方。
 
 ## 许可
 

@@ -71,7 +71,7 @@ A `cordis instrumented plugin`: `package.json` declares `dsh.bundle.patch` (its 
 
 The host half's `apply()` is a no-op; the client half does one thing: append a single `<style id="dsh-theme-newsprint-styles">` element to `<head>` with the light tokens + L3 typography, and add a `dsh-newsprint-active` class on `html` to scope it. The fiber-dispose hook removes the class and the `<style>`.
 
-The benefit is durability against dsh client-topology refactors. When `dsh-client-runtime` was split into the two `dsh-api-*` controllers in 0.1.5-rc.2, every plugin that went through `ctx.theme` broke (services collided at fiber time). This plugin only injects CSS into the DOM, so it is immune. The cost is that we cannot hook into dshmarket's "light/dark theme" picker — so the dark scheme is simply delegated to dsh's official dark.
+The benefit is durability against dsh client-topology refactors. When `dsh-client-runtime` was split into the two `dsh-api-*` controllers in 0.1.5-rc.2, every plugin that went through `ctx.theme` broke (services collided at fiber time). This plugin only injects CSS into the DOM, so it is immune. The cost is that no "light/dark" picker of the theme runtime can drive it — so the dark scheme is simply delegated to dsh's official dark.
 
 ## License
 
