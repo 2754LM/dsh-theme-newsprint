@@ -61,5 +61,8 @@
       "inject": [],
       "platform": "web"
     }
+  },
+  "scripts": {
+    "test": "node tests/dark-scheme.spec.mjs"
   }
 }
